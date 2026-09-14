@@ -1,0 +1,185 @@
+.page {
+  padding: 32px 20px;
+  text-align: left;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.site-header h1 {
+  margin-bottom: 4px;
+}
+
+.site-tagline {
+  color: var(--text);
+  font-size: 15px;
+}
+
+.sport-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0;
+}
+
+.filter-button {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filter-button--active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  padding: 48px 16px;
+}
+
+.confirmation-line {
+  font-size: 16px;
+  color: var(--text-h);
+}
+
+.game-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0 40px;
+}
+
+.game-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.game-card--full {
+  opacity: 0.7;
+}
+
+.game-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.game-sport {
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.game-badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--border);
+  color: var(--text);
+}
+
+.spots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.spots-bar {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.spots-bar-fill {
+  height: 100%;
+  background: var(--accent);
+}
+
+.spots-count {
+  font-size: 14px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.join-button {
+  margin-top: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+}
+
+.join-button:disabled {
+  background: var(--border);
+  color: var(--text);
+  cursor: not-allowed;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px 0;
+  color: var(--text);
+}
+
+.primary-button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+}
+
+.game-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 320px;
+}
+
+.game-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.game-form input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  font: inherit;
+}
+
+.game-form button {
+  margin-top: 8px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  align-self: flex-start;
+}
