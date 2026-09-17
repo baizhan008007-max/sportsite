@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import GameList from './components/GameList'
 import { humanizeDate } from './utils/date'
 import { buildWhatsAppLink } from './utils/whatsapp'
-import { supabase } from './lib/supabaseClient'
+import { supabase, supabaseConfigError } from './lib/supabaseClient'
 import './App.css'
 
 const FORMATS = ['5x5', '6x6', '7x7', '8x8']
@@ -28,6 +28,12 @@ function App() {
   const [whatsapp, setWhatsapp] = useState('')
 
   useEffect(() => {
+    if (supabaseConfigError) {
+      setLoadError(supabaseConfigError)
+      setLoading(false)
+      return
+    }
+
     loadGames()
   }, [])
 
@@ -141,7 +147,11 @@ function App() {
         </p>
       </header>
 
-      {joinedGame ? (
+      {supabaseConfigError ? (
+        <p className="status-message status-message--error">
+          {supabaseConfigError}
+        </p>
+      ) : joinedGame ? (
         <div className="confirmation">
           <h2>Готово, ты записан!</h2>
           <p className="confirmation-line">{joinedGame.place}</p>
