@@ -14,8 +14,13 @@ function GameList({ games, onJoin, onCreateClick }) {
 
   return (
     <ul className="game-list">
-      {games.map((game) => (
-        <GameCard key={game.id} game={game} onJoin={onJoin} />
+      {games.map((game, index) => (
+        <GameCard
+          key={game.id}
+          game={game}
+          onJoin={onJoin}
+          featured={index === 0}
+        />
       ))}
     </ul>
   )

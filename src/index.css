@@ -1,18 +1,29 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
+  --text: #5b6169;
+  --text-h: #10151a;
+  --bg: #f3f5f2;
+  --card-bg: #ffffff;
+  --border: #e2e6e0;
   --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
+  --accent: #16a34a;
+  --accent-hover: #128a3e;
+  --accent-contrast: #ffffff;
+  --accent-bg: rgba(22, 163, 74, 0.1);
+  --accent-border: rgba(22, 163, 74, 0.35);
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.12);
+  --full: #9aa0a6;
+  --full-bg: rgba(154, 160, 166, 0.15);
   --social-bg: rgba(244, 243, 236, 0.5);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --shadow-card:
+    rgba(16, 21, 26, 0.04) 0 1px 2px, rgba(16, 21, 26, 0.1) 0 10px 24px -10px;
+  --shadow-card-hover:
+    rgba(16, 21, 26, 0.06) 0 2px 4px, rgba(16, 21, 26, 0.16) 0 16px 28px -12px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --sans: 'Manrope', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: 'Unbounded', var(--sans);
   --mono: ui-monospace, Consolas, monospace;
 
   font: 18px/145% var(--sans);
@@ -34,15 +45,26 @@
   :root {
     --text: #9ca3af;
     --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
+    --bg: #10130f;
+    --card-bg: #191f1a;
+    --border: #2a322c;
     --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
+    --accent: #34d399;
+    --accent-hover: #2bb886;
+    --accent-contrast: #08150e;
+    --accent-bg: rgba(52, 211, 153, 0.14);
+    --accent-border: rgba(52, 211, 153, 0.4);
+    --warning: #fbbf24;
+    --warning-bg: rgba(251, 191, 36, 0.14);
+    --full: #565f5a;
+    --full-bg: rgba(86, 95, 90, 0.2);
     --social-bg: rgba(47, 48, 58, 0.5);
     --shadow:
       rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    --shadow-card:
+      rgba(0, 0, 0, 0.35) 0 1px 2px, rgba(0, 0, 0, 0.45) 0 10px 24px -10px;
+    --shadow-card-hover:
+      rgba(0, 0, 0, 0.4) 0 2px 4px, rgba(0, 0, 0, 0.55) 0 16px 28px -12px;
   }
 
   #social .button-icon {
@@ -59,7 +81,6 @@ body {
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;

@@ -158,9 +158,17 @@ function App() {
   return (
     <div className="page">
       <header className="site-header">
-        <h1>Сыграем в футбол</h1>
+        <div className="brand-row">
+          <h1 className="brand-logo">
+            <span className="brand-icon" aria-hidden="true">
+              ⚽
+            </span>
+            Сыграем
+          </h1>
+          <span className="brand-domain">sygraem.kz</span>
+        </div>
         <p className="site-tagline">
-          Поиск любительских футбольных игр на полях Алматы
+          Уличный футбол в Алматы — найди игру рядом и запишись за пару кликов
         </p>
       </header>
 
