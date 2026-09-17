@@ -36,7 +36,9 @@ function GameCard({ game, onJoin, featured }) {
       </div>
 
       <div className="game-place">{game.place}</div>
-      <div className="game-organizer">Организатор: {game.organizerName}</div>
+      <div className="game-organizer">
+        Организатор: {game.organizer_name}
+      </div>
       <div className="game-datetime">
         <span className="game-date">{humanizeDate(game.date)}</span>
         <span className="game-time">{game.time}</span>

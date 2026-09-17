@@ -420,6 +420,23 @@
   color: var(--text);
 }
 
+.status-message {
+  margin: 20px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-message--error {
+  color: var(--warning);
+  border-color: var(--warning-bg);
+  background: var(--warning-bg);
+}
+
 .primary-button {
   margin-top: 12px;
   padding: 10px 16px;
