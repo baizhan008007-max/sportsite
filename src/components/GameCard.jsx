@@ -1,9 +1,23 @@
+import { useState } from 'react'
 import { humanizeDate } from '../utils/date'
 
 function GameCard({ game, onJoin, featured }) {
-  const isFull = game.filled >= game.total
-  const percent = Math.round((game.filled / game.total) * 100)
+  const [isJoining, setIsJoining] = useState(false)
+  const [name, setName] = useState('')
+
+  const isFull = game.participants.length >= game.total
+  const percent = Math.round((game.participants.length / game.total) * 100)
   const spotsState = isFull ? 'full' : percent >= 75 ? 'warning' : 'ok'
+
+  function handleJoinSubmit(e) {
+    e.preventDefault()
+    const trimmedName = name.trim()
+    if (!trimmedName) return
+
+    onJoin(game.id, trimmedName)
+    setName('')
+    setIsJoining(false)
+  }
 
   return (
     <li
@@ -22,11 +36,18 @@ function GameCard({ game, onJoin, featured }) {
       </div>
 
       <div className="game-place">{game.place}</div>
+      <div className="game-organizer">Организатор: {game.organizerName}</div>
       <div className="game-datetime">
         <span className="game-date">{humanizeDate(game.date)}</span>
         <span className="game-time">{game.time}</span>
       </div>
       <div className="game-price">{game.price} ₸ / чел.</div>
+
+      {game.participants.length > 0 && (
+        <div className="game-participants">
+          Уже играют: {game.participants.join(', ')}
+        </div>
+      )}
 
       <div className="spots">
         <div className="spots-bar">
@@ -36,17 +57,45 @@ function GameCard({ game, onJoin, featured }) {
           />
         </div>
         <span className={`spots-count spots-count--${spotsState}`}>
-          {game.filled}/{game.total}
+          {game.participants.length}/{game.total}
         </span>
       </div>
 
-      <button
-        className="join-button"
-        disabled={isFull}
-        onClick={() => onJoin(game.id)}
-      >
-        {isFull ? 'Мест нет' : 'Присоединиться'}
-      </button>
+      {isFull ? (
+        <button className="join-button" disabled>
+          Мест нет
+        </button>
+      ) : isJoining ? (
+        <form className="join-form" onSubmit={handleJoinSubmit}>
+          <input
+            type="text"
+            placeholder="Твоё имя"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            autoFocus
+          />
+          <div className="join-form-actions">
+            <button type="submit" className="join-button">
+              Записаться
+            </button>
+            <button
+              type="button"
+              className="join-cancel"
+              onClick={() => {
+                setIsJoining(false)
+                setName('')
+              }}
+            >
+              Отмена
+            </button>
+          </div>
+        </form>
+      ) : (
+        <button className="join-button" onClick={() => setIsJoining(true)}>
+          Присоединиться
+        </button>
+      )}
     </li>
   )
 }

@@ -80,6 +80,46 @@
   color: var(--text-h);
 }
 
+.confirmation-organizer {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 4px;
+}
+
+.whatsapp-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 14px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.1s ease,
+    background 0.15s ease;
+}
+
+.whatsapp-button:hover {
+  background: var(--accent-hover);
+}
+
+.whatsapp-button:active {
+  transform: scale(0.97);
+}
+
+.confirmation-note {
+  max-width: 36ch;
+  font-size: 13px;
+  color: var(--text);
+  margin-top: 10px;
+}
+
 .game-list {
   list-style: none;
   padding: 0;
@@ -207,6 +247,12 @@
   margin-top: 6px;
 }
 
+.game-organizer {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
 .game-datetime {
   display: flex;
   align-items: baseline;
@@ -229,6 +275,12 @@
   font-size: 13px;
   color: var(--text);
   font-weight: 500;
+}
+
+.game-participants {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 145%;
 }
 
 .spots {
@@ -312,6 +364,54 @@
   background: var(--full-bg);
   color: var(--text);
   cursor: not-allowed;
+}
+
+.join-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.join-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+}
+
+.join-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.join-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.join-form .join-button {
+  flex: 1;
+  margin-top: 0;
+}
+
+.join-cancel {
+  border: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.join-cancel:hover {
+  color: var(--text-h);
 }
 
 .empty-state {
