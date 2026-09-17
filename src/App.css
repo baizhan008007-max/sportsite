@@ -14,30 +14,6 @@
   font-size: 15px;
 }
 
-.sport-filter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 20px 0;
-}
-
-.filter-button {
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text-h);
-  font: inherit;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.filter-button--active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
-}
-
 .confirmation {
   display: flex;
   flex-direction: column;
@@ -80,9 +56,14 @@
   align-items: center;
 }
 
-.game-sport {
+.game-format {
   font-weight: 600;
   color: var(--text-h);
+}
+
+.game-level {
+  font-size: 14px;
+  color: var(--text);
 }
 
 .game-badge {
@@ -166,7 +147,8 @@
   color: var(--text-h);
 }
 
-.game-form input {
+.game-form input,
+.game-form select {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid var(--border);

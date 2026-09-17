@@ -7,7 +7,7 @@ function GameCard({ game, onJoin }) {
   return (
     <li className={`game-card${isFull ? ' game-card--full' : ''}`}>
       <div className="game-card-top">
-        <span className="game-sport">{game.sport}</span>
+        <span className="game-format">{game.format}</span>
         {isFull && <span className="game-badge">Мест нет</span>}
       </div>
 
@@ -15,6 +15,7 @@ function GameCard({ game, onJoin }) {
       <div className="game-datetime">
         {humanizeDate(game.date)}, {game.time}
       </div>
+      <div className="game-level">{game.level}</div>
       <div className="game-price">{game.price} ₸ / чел.</div>
 
       <div className="spots">
