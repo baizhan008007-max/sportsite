@@ -1,9 +1,13 @@
 import { useState } from 'react'
 import { humanizeDate } from '../utils/date'
 
-function GameCard({ game, onJoin, featured }) {
+function GameCard({ game, onJoin, onCancel, featured }) {
   const [isJoining, setIsJoining] = useState(false)
   const [name, setName] = useState('')
+  const [isCancelling, setIsCancelling] = useState(false)
+  const [cancelCode, setCancelCode] = useState('')
+  const [cancelError, setCancelError] = useState(null)
+  const [cancelling, setCancelling] = useState(false)
 
   const isFull = game.participants.length >= game.total
   const percent = Math.round((game.participants.length / game.total) * 100)
@@ -17,6 +21,21 @@ function GameCard({ game, onJoin, featured }) {
     onJoin(game.id, trimmedName)
     setName('')
     setIsJoining(false)
+  }
+
+  async function handleCancelSubmit(e) {
+    e.preventDefault()
+    const trimmedCode = cancelCode.trim()
+    if (!trimmedCode) return
+
+    setCancelError(null)
+    setCancelling(true)
+    const result = await onCancel(game.id, trimmedCode)
+    setCancelling(false)
+
+    if (!result.ok) {
+      setCancelError(result.message)
+    }
   }
 
   return (
@@ -96,6 +115,44 @@ function GameCard({ game, onJoin, featured }) {
       ) : (
         <button className="join-button" onClick={() => setIsJoining(true)}>
           Присоединиться
+        </button>
+      )}
+
+      {isCancelling ? (
+        <form className="cancel-form" onSubmit={handleCancelSubmit}>
+          <input
+            type="text"
+            placeholder="Код отмены"
+            value={cancelCode}
+            onChange={(e) => setCancelCode(e.target.value)}
+            required
+            autoFocus
+          />
+          <div className="join-form-actions">
+            <button type="submit" className="cancel-submit" disabled={cancelling}>
+              {cancelling ? 'Отменяем…' : 'Отменить игру'}
+            </button>
+            <button
+              type="button"
+              className="join-cancel"
+              onClick={() => {
+                setIsCancelling(false)
+                setCancelCode('')
+                setCancelError(null)
+              }}
+            >
+              Закрыть
+            </button>
+          </div>
+          {cancelError && <p className="cancel-error">{cancelError}</p>}
+        </form>
+      ) : (
+        <button
+          type="button"
+          className="cancel-toggle"
+          onClick={() => setIsCancelling(true)}
+        >
+          Отменить игру
         </button>
       )}
     </li>

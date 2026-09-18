@@ -1,6 +1,6 @@
 import GameCard from './GameCard'
 
-function GameList({ games, onJoin, onCreateClick }) {
+function GameList({ games, onJoin, onCancel, onCreateClick }) {
   if (games.length === 0) {
     return (
       <div className="empty-state">
@@ -19,6 +19,7 @@ function GameList({ games, onJoin, onCreateClick }) {
           key={game.id}
           game={game}
           onJoin={onJoin}
+          onCancel={onCancel}
           featured={index === 0}
         />
       ))}

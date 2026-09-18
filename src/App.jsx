@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import GameList from './components/GameList'
 import { humanizeDate } from './utils/date'
 import { buildWhatsAppLink } from './utils/whatsapp'
+import { generateCancelCode, hashCancelCode } from './utils/cancelCode'
 import { supabase, supabaseConfigError } from './lib/supabaseClient'
 import './App.css'
 
@@ -13,6 +14,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(null)
   const [joinedGame, setJoinedGame] = useState(null)
+  const [createdCode, setCreatedCode] = useState(null)
   const [formError, setFormError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const formRef = useRef(null)
@@ -60,6 +62,9 @@ function App() {
     setFormError(null)
     setSubmitting(true)
 
+    const cancelCode = generateCancelCode()
+    const cancelCodeHash = await hashCancelCode(cancelCode)
+
     const { data, error } = await supabase
       .from('games')
       .insert({
@@ -73,6 +78,7 @@ function App() {
         organizer_name: organizerName,
         organizer_whatsapp: whatsapp,
         participants: [],
+        cancel_code_hash: cancelCodeHash,
       })
       .select()
       .single()
@@ -89,6 +95,7 @@ function App() {
         `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)
       )
     )
+    setCreatedCode(cancelCode)
 
     setPlace('')
     setDate('')
@@ -126,6 +133,24 @@ function App() {
     setJoinedGame(data)
   }
 
+  async function handleCancelGame(id, code) {
+    const { data, error } = await supabase.rpc('cancel_game', {
+      p_game_id: id,
+      p_code: code,
+    })
+
+    if (error) {
+      return { ok: false, message: 'Не получилось отменить игру. Попробуй ещё раз.' }
+    }
+
+    if (!data) {
+      return { ok: false, message: 'Неверный код отмены.' }
+    }
+
+    setGames((prevGames) => prevGames.filter((g) => g.id !== id))
+    return { ok: true }
+  }
+
   function scrollToForm() {
     formRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -151,6 +176,23 @@ function App() {
         <p className="status-message status-message--error">
           {supabaseConfigError}
         </p>
+      ) : createdCode ? (
+        <div className="confirmation">
+          <h2>Игра создана!</h2>
+          <p className="confirmation-line">Код отмены игры:</p>
+          <p className="cancel-code">{createdCode}</p>
+          <p className="confirmation-note">
+            Сохрани этот код — без него отменить игру будет нельзя. Мы
+            показываем его только один раз и нигде больше не храним в
+            открытом виде.
+          </p>
+          <button
+            className="primary-button"
+            onClick={() => setCreatedCode(null)}
+          >
+            Понятно, к играм
+          </button>
+        </div>
       ) : joinedGame ? (
         <div className="confirmation">
           <h2>Готово, ты записан!</h2>
@@ -201,6 +243,7 @@ function App() {
             <GameList
               games={games}
               onJoin={handleJoin}
+              onCancel={handleCancelGame}
               onCreateClick={scrollToForm}
             />
           )}

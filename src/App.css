@@ -120,6 +120,18 @@
   margin-top: 10px;
 }
 
+.cancel-code {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  padding: 10px 20px;
+  border-radius: 12px;
+  margin: 8px 0;
+}
+
 .game-list {
   list-style: none;
   padding: 0;
@@ -412,6 +424,74 @@
 
 .join-cancel:hover {
   color: var(--text-h);
+}
+
+.cancel-toggle {
+  align-self: flex-start;
+  margin-top: 4px;
+  border: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 0;
+  opacity: 0.7;
+}
+
+.cancel-toggle:hover {
+  opacity: 1;
+  color: var(--warning);
+}
+
+.cancel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.cancel-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  font-family: var(--mono);
+  letter-spacing: 2px;
+}
+
+.cancel-form input:focus {
+  outline: none;
+  border-color: var(--warning);
+  box-shadow: 0 0 0 3px var(--warning-bg);
+}
+
+.cancel-submit {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: var(--warning);
+  color: var(--accent-contrast);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cancel-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.cancel-error {
+  font-size: 13px;
+  color: var(--warning);
+  font-weight: 600;
 }
 
 .empty-state {
