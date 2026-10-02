@@ -1,17 +1,23 @@
 import { useState } from 'react'
+import { GoogleButton } from './AuthBar'
 import { humanizeDate } from '../utils/date'
+import { displayName } from '../utils/user'
 
-function GameCard({ game, onJoin, onCancel, featured }) {
+function GameCard({ game, user, isOwner, onJoin, onCancel, onSignIn, featured }) {
   const [isJoining, setIsJoining] = useState(false)
   const [name, setName] = useState('')
   const [isCancelling, setIsCancelling] = useState(false)
-  const [cancelCode, setCancelCode] = useState('')
   const [cancelError, setCancelError] = useState(null)
   const [cancelling, setCancelling] = useState(false)
 
   const isFull = game.participants.length >= game.total
   const percent = Math.round((game.participants.length / game.total) * 100)
   const spotsState = isFull ? 'full' : percent >= 75 ? 'warning' : 'ok'
+
+  function startJoining() {
+    setName(displayName(user))
+    setIsJoining(true)
+  }
 
   function handleJoinSubmit(e) {
     e.preventDefault()
@@ -23,14 +29,10 @@ function GameCard({ game, onJoin, onCancel, featured }) {
     setIsJoining(false)
   }
 
-  async function handleCancelSubmit(e) {
-    e.preventDefault()
-    const trimmedCode = cancelCode.trim()
-    if (!trimmedCode) return
-
+  async function handleCancelConfirm() {
     setCancelError(null)
     setCancelling(true)
-    const result = await onCancel(game.id, trimmedCode)
+    const result = await onCancel(game.id)
     setCancelling(false)
 
     if (!result.ok) {
@@ -51,13 +53,12 @@ function GameCard({ game, onJoin, onCancel, featured }) {
       <div className="game-card-top">
         <span className="game-pill game-pill--format">{game.format}</span>
         <span className="game-pill game-pill--level">{game.level}</span>
+        {isOwner && <span className="game-pill game-pill--mine">Твоя игра</span>}
         {isFull && <span className="game-badge">Мест нет</span>}
       </div>
 
       <div className="game-place">{game.place}</div>
-      <div className="game-organizer">
-        Организатор: {game.organizer_name}
-      </div>
+      <div className="game-organizer">Организатор: {game.organizer_name}</div>
       <div className="game-datetime">
         <span className="game-date">{humanizeDate(game.date)}</span>
         <span className="game-time">{game.time}</span>
@@ -86,6 +87,10 @@ function GameCard({ game, onJoin, onCancel, featured }) {
         <button className="join-button" disabled>
           Мест нет
         </button>
+      ) : !user ? (
+        <div className="join-gate">
+          <GoogleButton onClick={onSignIn}>Войти, чтобы записаться</GoogleButton>
+        </div>
       ) : isJoining ? (
         <form className="join-form" onSubmit={handleJoinSubmit}>
           <input
@@ -113,48 +118,48 @@ function GameCard({ game, onJoin, onCancel, featured }) {
           </div>
         </form>
       ) : (
-        <button className="join-button" onClick={() => setIsJoining(true)}>
+        <button className="join-button" onClick={startJoining}>
           Присоединиться
         </button>
       )}
 
-      {isCancelling ? (
-        <form className="cancel-form" onSubmit={handleCancelSubmit}>
-          <input
-            type="text"
-            placeholder="Код отмены"
-            value={cancelCode}
-            onChange={(e) => setCancelCode(e.target.value)}
-            required
-            autoFocus
-          />
-          <div className="join-form-actions">
-            <button type="submit" className="cancel-submit" disabled={cancelling}>
-              {cancelling ? 'Отменяем…' : 'Отменить игру'}
-            </button>
-            <button
-              type="button"
-              className="join-cancel"
-              onClick={() => {
-                setIsCancelling(false)
-                setCancelCode('')
-                setCancelError(null)
-              }}
-            >
-              Закрыть
-            </button>
+      {isOwner &&
+        (isCancelling ? (
+          <div className="cancel-form">
+            <p className="cancel-question">
+              Точно отменить игру? Вернуть её будет нельзя.
+            </p>
+            <div className="join-form-actions">
+              <button
+                type="button"
+                className="cancel-submit"
+                onClick={handleCancelConfirm}
+                disabled={cancelling}
+              >
+                {cancelling ? 'Отменяем…' : 'Да, отменить'}
+              </button>
+              <button
+                type="button"
+                className="join-cancel"
+                onClick={() => {
+                  setIsCancelling(false)
+                  setCancelError(null)
+                }}
+              >
+                Нет, оставить
+              </button>
+            </div>
+            {cancelError && <p className="cancel-error">{cancelError}</p>}
           </div>
-          {cancelError && <p className="cancel-error">{cancelError}</p>}
-        </form>
-      ) : (
-        <button
-          type="button"
-          className="cancel-toggle"
-          onClick={() => setIsCancelling(true)}
-        >
-          Отменить игру
-        </button>
-      )}
+        ) : (
+          <button
+            type="button"
+            className="cancel-toggle"
+            onClick={() => setIsCancelling(true)}
+          >
+            Отменить игру
+          </button>
+        ))}
     </li>
   )
 }

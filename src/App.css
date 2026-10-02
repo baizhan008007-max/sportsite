@@ -453,23 +453,6 @@
   margin-top: 8px;
 }
 
-.cancel-form input {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text-h);
-  font: inherit;
-  font-family: var(--mono);
-  letter-spacing: 2px;
-}
-
-.cancel-form input:focus {
-  outline: none;
-  border-color: var(--warning);
-  box-shadow: 0 0 0 3px var(--warning-bg);
-}
-
 .cancel-submit {
   flex: 1;
   padding: 10px 16px;
@@ -613,4 +596,145 @@
   .game-form button {
     transition: none;
   }
+}
+
+.auth-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.auth-bar--loading {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+.auth-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 5px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-card);
+}
+
+.auth-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.auth-avatar--empty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.auth-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.auth-signout {
+  border: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.75;
+}
+
+.auth-signout:hover {
+  opacity: 1;
+  color: var(--text-h);
+}
+
+.google-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text-h);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.1s ease,
+    border-color 0.15s ease;
+}
+
+.google-button:hover {
+  border-color: var(--accent-border);
+}
+
+.google-button:active {
+  transform: scale(0.97);
+}
+
+.google-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.google-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.auth-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 320px;
+  padding: 18px;
+  border: 1px dashed var(--border);
+  border-radius: 16px;
+  background: var(--card-bg);
+}
+
+.auth-gate p {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.join-gate {
+  margin-top: 4px;
+}
+
+.game-pill--mine {
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+}
+
+.cancel-question {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-h);
 }
