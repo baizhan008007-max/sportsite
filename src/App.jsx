@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import GameList from './components/GameList'
-import AuthBar, { GoogleButton } from './components/AuthBar'
+import AuthBar from './components/AuthBar'
+import AuthForm from './components/AuthForm'
 import { humanizeDate, isUpcoming, todayIso } from './utils/date'
 import { buildWhatsAppLink } from './utils/whatsapp'
 import { displayName } from './utils/user'
+import { signIn, signOut, signUp } from './lib/auth'
 import { supabase, supabaseConfigError } from './lib/supabaseClient'
 import './App.css'
 
@@ -12,7 +14,7 @@ const LEVELS = ['Любой', 'Начинающий', 'Средний', 'Опы�
 
 // Тексты ошибок, которые бросает функция join_game в базе.
 const JOIN_ERRORS = {
-  not_authenticated: 'Сначала войди через Google.',
+  not_authenticated: 'Сначала войди — по номеру телефона.',
   empty_name: 'Введи имя.',
   game_not_found: 'Эту игру уже отменили.',
   game_full: 'Мест больше нет.',
@@ -37,6 +39,7 @@ function App() {
   const [formError, setFormError] = useState(null)
   const [submitting, setSubmitting] = useState(false)
   const formRef = useRef(null)
+  const authRef = useRef(null)
 
   const [place, setPlace] = useState('')
   const [date, setDate] = useState('')
@@ -56,8 +59,8 @@ function App() {
       return
     }
 
-    // Имя в форме подставляем из профиля Google, но если человек его уже
-    // поправил — не перетираем.
+    // Имя в форме подставляем то, которое человек ввёл при регистрации (оно
+    // лежит в user_metadata), но если он его уже поправил — не перетираем.
     function applySession(session) {
       const nextUser = session?.user ?? null
 
@@ -101,24 +104,35 @@ function App() {
     setLoading(false)
   }
 
-  async function handleSignIn() {
+  // Вход и регистрация возвращают { ok, message } прямо в AuthForm — она и
+  // покажет ошибку. Пользователя здесь не ставим: сессию поймает
+  // onAuthStateChange, он же сработает при обновлении страницы.
+  async function handleSignIn({ phone, password }) {
     setAuthError(null)
+    return signIn({ phone, password })
+  }
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin },
-    })
+  async function handleSignUp({
+    phone,
+    password,
+    firstName,
+    lastName,
+    contactEmail,
+  }) {
+    setAuthError(null)
+    return signUp({ phone, password, firstName, lastName, contactEmail })
+  }
 
-    if (error) {
-      setAuthError('Не получилось открыть вход через Google. Попробуй ещё раз.')
-    }
+  // Форма входа на странице одна, поэтому кнопки «Войти» к ней прокручивают.
+  function handleShowAuth() {
+    authRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
   async function handleSignOut() {
-    const { error } = await supabase.auth.signOut()
+    const result = await signOut()
 
-    if (error) {
-      setAuthError('Не получилось выйти. Попробуй ещё раз.')
+    if (!result.ok) {
+      setAuthError(result.message)
       return
     }
 
@@ -133,7 +147,7 @@ function App() {
     setFormError(null)
 
     if (!user) {
-      setFormError('Сначала войди через Google.')
+      setFormError('Сначала войди — по номеру телефона.')
       return
     }
 
@@ -195,7 +209,7 @@ function App() {
     setFormError(null)
 
     if (!user) {
-      setFormError('Сначала войди через Google.')
+      setFormError('Сначала войди — по номеру телефона.')
       return
     }
 
@@ -240,8 +254,11 @@ function App() {
     return { ok: true }
   }
 
+  // У вошедшего внизу форма создания игры, у остальных на том же месте форма
+  // входа. Кнопка «Создать игру» ведёт к той, которая сейчас на странице.
   function scrollToForm() {
-    formRef.current?.scrollIntoView({ behavior: 'smooth' })
+    const target = formRef.current ?? authRef.current
+    target?.scrollIntoView({ behavior: 'smooth' })
   }
 
   // Запрос отсекает прошлые дни, а время сегодняшних игр проверяем здесь:
@@ -268,7 +285,7 @@ function App() {
           <AuthBar
             user={user}
             ready={authReady}
-            onSignIn={handleSignIn}
+            onShowAuth={handleShowAuth}
             onSignOut={handleSignOut}
           />
         )}
@@ -346,23 +363,25 @@ function App() {
               user={user}
               onJoin={handleJoin}
               onCancel={handleCancelGame}
-              onSignIn={handleSignIn}
+              onShowAuth={handleShowAuth}
               onCreateClick={scrollToForm}
             />
           )}
 
-          <h2>Создать игру</h2>
+          {/* У не вошедшего здесь форма входа, а у неё заголовок свой. */}
+          {user && <h2>Создать игру</h2>}
 
           {formError && (
             <p className="status-message status-message--error">{formError}</p>
           )}
 
           {!user ? (
-            <div className="auth-gate" ref={formRef}>
-              <p>Чтобы создать игру, войди — так мы поймём, чья она.</p>
-              <GoogleButton onClick={handleSignIn}>
-                Войти через Google
-              </GoogleButton>
+            <div className="auth-gate" ref={authRef}>
+              <AuthForm
+                onSignIn={handleSignIn}
+                onSignUp={handleSignUp}
+                note="Чтобы создать игру или записаться на чужую, войди — так мы поймём, чья игра."
+              />
             </div>
           ) : (
             <form className="game-form" ref={formRef} onSubmit={handleSubmit}>

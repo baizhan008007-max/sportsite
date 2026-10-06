@@ -534,7 +534,10 @@
   box-shadow: var(--shadow-card);
 }
 
-.game-form label {
+/* Форма входа переиспользует правила формы создания игры, а не повторяет их:
+   так обе выглядят одинаково и не разъедутся при правках. */
+.game-form label,
+.auth-form label {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -544,7 +547,8 @@
 }
 
 .game-form input,
-.game-form select {
+.game-form select,
+.auth-form input:not([type='checkbox']) {
   padding: 9px 10px;
   border-radius: 8px;
   border: 1px solid var(--border);
@@ -557,13 +561,15 @@
 }
 
 .game-form input:focus,
-.game-form select:focus {
+.game-form select:focus,
+.auth-form input:not([type='checkbox']):focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
-.game-form button {
+.game-form button,
+.auth-form button[type='submit'] {
   margin-top: 8px;
   padding: 11px 16px;
   border-radius: 10px;
@@ -578,12 +584,19 @@
     background 0.15s ease;
 }
 
-.game-form button:hover {
+.game-form button:hover,
+.auth-form button[type='submit']:hover {
   background: var(--accent-hover);
 }
 
-.game-form button:active {
+.game-form button:active,
+.auth-form button[type='submit']:active {
   transform: scale(0.97);
+}
+
+.auth-form button[type='submit']:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -593,7 +606,8 @@
 
   .join-button,
   .primary-button,
-  .game-form button {
+  .game-form button,
+  .auth-form button[type='submit'] {
     transition: none;
   }
 }
@@ -667,60 +681,135 @@
   color: var(--text-h);
 }
 
-.google-button {
+/* Кнопка «Войти» в шапке — ярлык к форме ниже, а не второе главное действие:
+   входит человек в самой форме. Поэтому текстом, как «Выйти» на её месте у
+   вошедшего, а заливку оставляем кнопке отправки формы. */
+.auth-signin {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 16px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--card-bg);
-  color: var(--text-h);
-  font-family: var(--sans);
-  font-size: 14px;
+  gap: 4px;
+  border: none;
+  background: none;
+  padding: 4px;
+  color: var(--accent);
+  font: inherit;
+  font-size: 13px;
   font-weight: 700;
+  text-decoration: underline;
   cursor: pointer;
-  box-shadow: var(--shadow-card);
-  transition:
-    transform 0.1s ease,
-    border-color 0.15s ease;
 }
 
-.google-button:hover {
-  border-color: var(--accent-border);
+.auth-signin:hover {
+  color: var(--accent-hover);
 }
 
-.google-button:active {
-  transform: scale(0.97);
+.auth-signin-arrow {
+  display: inline-block;
+  font-size: 11px;
+  text-decoration: none;
 }
 
-.google-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.google-icon {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-}
-
-.auth-gate {
+/* Имя, под ним номер. Почты у аккаунта нет, поэтому номер — единственный
+   способ увидеть, в чей аккаунт попал. */
+.auth-identity {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-  max-width: 320px;
-  padding: 18px;
-  border: 1px dashed var(--border);
-  border-radius: 16px;
-  background: var(--card-bg);
+  line-height: 1.25;
 }
 
-.auth-gate p {
-  font-size: 14px;
+.auth-phone {
+  font-size: 12px;
   font-weight: 600;
+  color: var(--text);
+  opacity: 0.75;
+}
+
+/* Карточку рисует .auth-form-wrap, здесь только ширина — иначе была бы рамка
+   внутри рамки. Правило .auth-gate p убрано нарочно: оно перекрашивало бы
+   красный текст ошибки внутри формы в обычный цвет. */
+.auth-gate {
+  max-width: 320px;
+}
+
+.auth-form-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow-card);
+}
+
+.auth-form-title {
+  margin: 0;
+  font-family: var(--heading);
+  font-size: 19px;
+  font-weight: 700;
   color: var(--text-h);
+}
+
+.auth-form-note {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+/* Ошибка входа и так заметна внутри небольшой формы — большие отступы
+   status-message здесь только растягивают карточку. */
+.auth-form-wrap .status-message {
+  margin: 0;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-field-hint {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--text);
+  opacity: 0.85;
+}
+
+/* label в формах стоит колонкой, а здесь галочка должна быть слева от текста. */
+.auth-show-password {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.auth-show-password input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* Переключатель «Нет аккаунта? Зарегистрироваться» — ссылка, а не кнопка:
+   главное действие в форме одно, и это кнопка отправки. */
+.auth-switch {
+  align-self: flex-start;
+  border: none;
+  background: none;
+  padding: 4px;
+  color: var(--accent);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.auth-switch:hover {
+  color: var(--accent-hover);
 }
 
 .join-gate {

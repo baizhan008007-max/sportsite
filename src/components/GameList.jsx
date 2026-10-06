@@ -1,6 +1,6 @@
 import GameCard from './GameCard'
 
-function GameList({ games, user, onJoin, onCancel, onSignIn, onCreateClick }) {
+function GameList({ games, user, onJoin, onCancel, onShowAuth, onCreateClick }) {
   if (games.length === 0) {
     return (
       <div className="empty-state">
@@ -22,7 +22,7 @@ function GameList({ games, user, onJoin, onCancel, onSignIn, onCreateClick }) {
           isOwner={Boolean(user) && game.owner_id === user.id}
           onJoin={onJoin}
           onCancel={onCancel}
-          onSignIn={onSignIn}
+          onShowAuth={onShowAuth}
           featured={index === 0}
         />
       ))}

@@ -1,9 +1,16 @@
 import { useState } from 'react'
-import { GoogleButton } from './AuthBar'
 import { humanizeDate } from '../utils/date'
 import { displayName } from '../utils/user'
 
-function GameCard({ game, user, isOwner, onJoin, onCancel, onSignIn, featured }) {
+function GameCard({
+  game,
+  user,
+  isOwner,
+  onJoin,
+  onCancel,
+  onShowAuth,
+  featured,
+}) {
   const [isJoining, setIsJoining] = useState(false)
   const [name, setName] = useState('')
   const [isCancelling, setIsCancelling] = useState(false)
@@ -89,7 +96,10 @@ function GameCard({ game, user, isOwner, onJoin, onCancel, onSignIn, featured })
         </button>
       ) : !user ? (
         <div className="join-gate">
-          <GoogleButton onClick={onSignIn}>Войти, чтобы записаться</GoogleButton>
+          {/* Форма входа одна и живёт ниже на странице — кнопка к ней прокручивает. */}
+          <button type="button" className="join-button" onClick={onShowAuth}>
+            Войти, чтобы записаться
+          </button>
         </div>
       ) : isJoining ? (
         <form className="join-form" onSubmit={handleJoinSubmit}>
